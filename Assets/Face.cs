@@ -17,8 +17,15 @@ public class Face : MonoBehaviour {
 	}
 	
 	public void GazeEnter(bool gazedAt){
+		// If we are clicking, don't change
+		if(gazedAt){
+			RubiksCube.current.SetFocus(transform.position);
+		}
 		GetComponent<Renderer>().material.color = gazedAt ? highlightColor: startColor;
 	}
 	
-	
+	public void PointerDown(bool point){
+		Debug.Log ("Clicked!" + gameObject.name);
+		RubiksCube.current.PointerDown(point);
+	}
 }

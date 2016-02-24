@@ -45,7 +45,6 @@ public class Cube : MonoBehaviour {
 		gameObject.transform.localScale = Vector3.one;
 		transform.localPosition = new Vector3(x, y, z);
 		// Turn off faces that are not on the edge
-		Debug.Log("Count of faces is: " + faces.Count);
 		foreach(GameObject face in faces){
 			if(x > 0 && face.transform.localPosition.x > 0){
 				face.SetActive(true);
