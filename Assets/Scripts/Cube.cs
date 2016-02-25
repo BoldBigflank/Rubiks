@@ -35,7 +35,11 @@ public class Cube : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
+//		Vector3 localPosition = transform.localPosition;
+//		localPosition.x = Mathf.RoundToInt(localPosition.x);
+//		localPosition.y = Mathf.RoundToInt(localPosition.y);
+//		localPosition.z = Mathf.RoundToInt(localPosition.z);
+//		transform.localPosition = localPosition;
 	}
 	
 	public void Initialize(int x, int y, int z){
