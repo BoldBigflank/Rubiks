@@ -38,6 +38,7 @@ public class RubiksCube : MonoBehaviour {
 				}
 			}
 		}
+		Randomize(20);
 	}
 	
 	// Update is called once per frame
@@ -86,6 +87,48 @@ public class RubiksCube : MonoBehaviour {
 			}
 			
 			oldPoint = newPoint;
+		}
+	}
+	
+	public void Randomize(int turns){
+		for(int i = 0; i < turns; i++){
+			// Choose an axis
+			Vector3 randomAxis = Vector3.zero;
+			int randomAxisInt = Random.Range(0,3);
+			
+			if(randomAxisInt == 0) randomAxis = Vector3.right;
+			if(randomAxisInt == 1) randomAxis = Vector3.up;
+			if(randomAxisInt == 2) randomAxis = Vector3.forward;
+			
+			// Choose a cube
+			int cubeNumber = Random.Range(0, cubes.Count);
+			GameObject cube = cubes[cubeNumber];
+			
+			// Choose an angle 90,180,270
+			float randomAngle = Random.Range(1,4) * 90.0F;
+			
+			
+			RotateColumn(randomAxis, cube.transform.position, randomAngle);
+		}
+	}
+	
+	public void RotateColumn(Vector3 axis, Vector3 focusFace, float angle){
+		foreach(GameObject c in cubes){
+			if(axis == Vector3.right){
+				if(Mathf.RoundToInt(c.transform.position.x) == Mathf.RoundToInt(focusFace.x)){
+//					c.transform.parent = spinner.transform;
+					c.transform.RotateAround(Vector3.zero, axis, angle);
+				}
+			} else if(axis == Vector3.up){
+				if(Mathf.RoundToInt(c.transform.position.y) == Mathf.RoundToInt(focusFace.y)){
+					c.transform.RotateAround(Vector3.zero, axis, angle);
+				}
+			} else if(axis == Vector3.forward){
+				if(Mathf.RoundToInt(c.transform.position.z) == Mathf.RoundToInt(focusFace.z)){
+					c.transform.RotateAround(Vector3.zero, axis, angle);
+				}
+			}
+			
 		}
 	}
 	
