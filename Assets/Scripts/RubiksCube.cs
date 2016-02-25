@@ -13,7 +13,7 @@ public class RubiksCube : MonoBehaviour {
 	List<float> neighborDistance;
 	bool pointerDown;
 	Vector3 focusPoint; // The angle the camera is
-	Vector3 oldPoint;
+	Vector3 oldPoint; // The previous frame's angle
 	Vector3 focusFace; // The transform of the clicked face
 	Vector3 rotateAxis;
 	
@@ -59,7 +59,6 @@ public class RubiksCube : MonoBehaviour {
 				Debug.Log ("You didn't win: " + (Vector3.Distance(cube, prevCube) - neighborDistance[i]));
 				return false;
 			}
-			
 		}
 		Debug.Log ("YOU WON!!!!!!!!");
 		return true;
@@ -102,11 +101,6 @@ public class RubiksCube : MonoBehaviour {
 				if(cross.x + cross.y + cross.z < 0.0F){
 					rotateAngle *= -1.0f;
 				}
-				Debug.Log("Cross: " + cross);
-//				 if(cross, rotateAxis)) < 0){
-//					rotateAngle *= -1.0F;
-//				}
-				Debug.Log ("rotateAngle: " + rotateAngle);
 				spinner.transform.RotateAround(Vector3.zero, rotateAxis, rotateAngle);
 			}
 			
@@ -131,7 +125,6 @@ public class RubiksCube : MonoBehaviour {
 			// Choose an angle 90,180,270
 			float randomAngle = Random.Range(1,4) * 90.0F;
 			
-			
 			RotateColumn(randomAxis, cube.transform.position, randomAngle);
 		}
 	}
@@ -140,7 +133,6 @@ public class RubiksCube : MonoBehaviour {
 		foreach(GameObject c in cubes){
 			if(axis == Vector3.right){
 				if(Mathf.RoundToInt(c.transform.position.x) == Mathf.RoundToInt(focusFace.x)){
-//					c.transform.parent = spinner.transform;
 					c.transform.RotateAround(Vector3.zero, axis, angle);
 				}
 			} else if(axis == Vector3.up){
@@ -157,27 +149,11 @@ public class RubiksCube : MonoBehaviour {
 	}
 	
 	public void SetFocus(Vector3 point){
-//		Debug.Log ("Setting focus" + point);
 		if(!pointerDown){
 			focusFace = point;
 		}
-//		if(pointerDown && rotateAxis == Vector3.zero){
-//			Vector3 cross = Vector3.Cross(focusPoint, point);
-//			float max = Mathf.Max(Mathf.Abs (cross.x), Mathf.Abs (cross.y), Mathf.Abs (cross.z)  );
-//			if(Mathf.Abs(cross.x) == max ){
-//				// X axis
-//				rotateAxis = Vector3.right;
-//			}
-//			
-//			// Get all the cubes of the column that includes the focusPoint
-//		}
-//		focusPoint = point;
 	}
 	
-//	public bool isClickedDown(){
-//		return pointerDown;
-//	}
-
 	public void PointerDown(bool down){
 		Debug.Log("Rubik's Cube PointerDown: " + down);
 		if(!pointerDown && down){
@@ -187,7 +163,6 @@ public class RubiksCube : MonoBehaviour {
 			spinner.GetComponent<Spinner>().PointerDown(down);
 		}
 		if(!down && pointerDown){ // Releasing
-		
 			spinner.GetComponent<Spinner>().PointerDown(down);
 			CheckWin();
 		}
@@ -202,6 +177,13 @@ public class RubiksCube : MonoBehaviour {
 			rotateAxis = Vector3.up;
 		} else if (Mathf.Abs (cross.z) == max) {
 			rotateAxis = Vector3.forward;
+		}
+	}
+	
+	void NewGame(){
+		foreach(GameObject c in cubes){
+			c.GetComponent<Cube>().Reset();
+			Randomize (1);
 		}
 	}
 }

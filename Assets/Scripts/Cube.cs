@@ -42,6 +42,11 @@ public class Cube : MonoBehaviour {
 //		transform.localPosition = localPosition;
 	}
 	
+	public void Reset(){
+		transform.localRotation = Quaternion.identity;
+		transform.localPosition = new Vector3(x, y, z);
+	}
+	
 	public void Initialize(int x, int y, int z){
 		this.x = x;
 		this.y = y;
