@@ -10,6 +10,7 @@ public class RubiksCube : MonoBehaviour {
 	
 	const int COLUMNS = 3;
 	List<GameObject> cubes;
+	List<float> neighborDistance;
 	bool pointerDown;
 	Vector3 focusPoint; // The angle the camera is
 	Vector3 oldPoint;
@@ -22,6 +23,7 @@ public class RubiksCube : MonoBehaviour {
 		pointerDown = false;
 		rotateAxis = Vector3.zero;
 		cubes = new List<GameObject>();
+		neighborDistance = new List<float>();
 		
 		// Make a cube for every spot
 		for(int i = 0; i < COLUMNS; i++){
@@ -38,7 +40,29 @@ public class RubiksCube : MonoBehaviour {
 				}
 			}
 		}
-		Randomize(20);
+		// Make the solution
+		for(int i = 0; i<cubes.Count; i++){
+			Vector3 cube = cubes[i].transform.position;
+			Vector3 prevCube = cubes[(i-1+cubes.Count)%cubes.Count].transform.position;
+			neighborDistance.Add(Vector3.Distance(cube, prevCube));
+		}
+		Randomize(1);
+	}
+	
+	bool CheckWin(){
+		// Go through array of cubes
+		// Make sure the previous one is just as far as when it was instantiated
+		for(int i = 0; i<cubes.Count; i++){
+			Vector3 cube = cubes[i].transform.position;
+			Vector3 prevCube = cubes[(i-1+cubes.Count)%cubes.Count].transform.position;
+			if(Mathf.Abs( Vector3.Distance(cube, prevCube) - neighborDistance[i]) > 0.1F) {
+				Debug.Log ("You didn't win: " + (Vector3.Distance(cube, prevCube) - neighborDistance[i]));
+				return false;
+			}
+			
+		}
+		Debug.Log ("YOU WON!!!!!!!!");
+		return true;
 	}
 	
 	// Update is called once per frame
@@ -165,6 +189,7 @@ public class RubiksCube : MonoBehaviour {
 		if(!down && pointerDown){ // Releasing
 		
 			spinner.GetComponent<Spinner>().PointerDown(down);
+			CheckWin();
 		}
 		pointerDown = down;
 	}
