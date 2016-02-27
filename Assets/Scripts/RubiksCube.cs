@@ -1,12 +1,22 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 public class RubiksCube : MonoBehaviour {
 	public static RubiksCube current;
 	public GameObject cube;
 	public GameObject mainCamera;
 	public GameObject spinner;
+
+	// Game Variables
+	bool solved;
+	float timer;
+	int turns;
+
+	// UI
+	public Text timerText;
+	public Text turnsText;
 	
 	const int COLUMNS = 3;
 	List<GameObject> cubes;
@@ -24,6 +34,9 @@ public class RubiksCube : MonoBehaviour {
 		rotateAxis = Vector3.zero;
 		cubes = new List<GameObject>();
 		neighborDistance = new List<float>();
+		timer = 0.0f;
+		turns = 0;
+		solved = false;
 		
 		// Make a cube for every spot
 		for(int i = 0; i < COLUMNS; i++){
@@ -46,7 +59,7 @@ public class RubiksCube : MonoBehaviour {
 			Vector3 prevCube = cubes[(i-1+cubes.Count)%cubes.Count].transform.position;
 			neighborDistance.Add(Vector3.Distance(cube, prevCube));
 		}
-		Randomize(1);
+		NewGame();
 	}
 	
 	bool CheckWin(){
@@ -60,12 +73,18 @@ public class RubiksCube : MonoBehaviour {
 				return false;
 			}
 		}
+		solved = true;
 		Debug.Log ("YOU WON!!!!!!!!");
 		return true;
 	}
 	
 	// Update is called once per frame
 	void Update () {
+		if(!solved) timer += Time.deltaTime;
+		// Update the UI
+		timerText.text = "Timer: " + (int)(timer / 60) + ":" + (int)(timer % 60);
+		turnsText.text = "Turns: " + turns;
+
 		Debug.DrawRay(Vector3.zero, focusPoint, Color.red);
 		Debug.DrawRay (Vector3.zero, focusFace, Color.green);
 		if(pointerDown){
@@ -165,6 +184,7 @@ public class RubiksCube : MonoBehaviour {
 		if(!down && pointerDown){ // Releasing
 			spinner.GetComponent<Spinner>().PointerDown(down);
 			CheckWin();
+			if(!solved && rotateAxis != Vector3.zero) turns++;
 		}
 		pointerDown = down;
 	}
@@ -180,10 +200,15 @@ public class RubiksCube : MonoBehaviour {
 		}
 	}
 	
-	void NewGame(){
+	public void NewGame(){
+		// Reset the timer/turns
+		timer = 0.0f;
+		turns = 0;
+		solved = false;
+
 		foreach(GameObject c in cubes){
 			c.GetComponent<Cube>().Reset();
-			Randomize (1);
 		}
+		Randomize (20);
 	}
 }
