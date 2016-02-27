@@ -431,10 +431,12 @@ PlayerSettings:
   tvOS::EnableIncrementalBuildSupportForIl2cpp: 0
   tvOS::ScriptingBackend: 1
   boolPropertyNames:
+  - Android::VR::enable
   - WebGL::analyzeBuildSize
   - WebGL::dataCaching
   - WebGL::useEmbeddedResources
   - XboxOne::enus
+  Android::VR::enable: 0
   WebGL::analyzeBuildSize: 0
   WebGL::dataCaching: 0
   WebGL::useEmbeddedResources: 0
@@ -446,7 +448,10 @@ PlayerSettings:
   WebGL::emscriptenArgs: 
   WebGL::template: APPLICATION:Default
   additionalIl2CppArgs::additionalIl2CppArgs: 
-  vectorPropertyNames: []
+  vectorPropertyNames:
+  - Android::VR::enabledDevices
+  Android::VR::enabledDevices:
+  - Oculus
   cloudProjectId: 
   projectName: 
   organizationId: 
