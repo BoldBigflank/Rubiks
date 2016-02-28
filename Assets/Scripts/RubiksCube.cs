@@ -29,6 +29,7 @@ public class RubiksCube : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
+		RenderSettings.ambientLight = Color.white;
 		current = this;
 		pointerDown = false;
 		rotateAxis = Vector3.zero;
@@ -82,7 +83,7 @@ public class RubiksCube : MonoBehaviour {
 	void Update () {
 		if(!solved) timer += Time.deltaTime;
 		// Update the UI
-		timerText.text = "Timer: " + (int)(timer / 60) + ":" + (int)(timer % 60);
+		timerText.text = "Timer: " + ((int)(timer / 60)).ToString("0") + ":" + ((int)(timer % 60)).ToString("00");
 		turnsText.text = "Turns: " + turns;
 
 		Debug.DrawRay(Vector3.zero, focusPoint, Color.red);
